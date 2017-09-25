@@ -713,12 +713,14 @@ func (d *cephRBDVolumeDriver) createRBDImage(pool string, name string, size int,
 	// lock it temporarily for fs creation
 	lockname, err := d.lockImage(pool, name)
 	if err != nil {
+		log.Printf("Creatin: Error locking image")
 		return err
 	}
 
 	// map to kernel device
 	device, err := d.mapImage(pool, name)
 	if err != nil {
+		log.Printf("Creation: Error Mapping image")
 		defer d.unlockImage(pool, name, lockname)
 		return err
 	}
@@ -726,6 +728,7 @@ func (d *cephRBDVolumeDriver) createRBDImage(pool string, name string, size int,
 	// make the filesystem - give it some time
 	_, err = shWithTimeout(5*time.Minute, mkfs, device)
 	if err != nil {
+		log.Printf("Creation: Failed to mkfs")
 		defer d.unmapImageDevice(device)
 		defer d.unlockImage(pool, name, lockname)
 		return err
@@ -737,6 +740,7 @@ func (d *cephRBDVolumeDriver) createRBDImage(pool string, name string, size int,
 	// unmap
 	err = d.unmapImageDevice(device)
 	if err != nil {
+		log.Printf("Creation: Failed to unmap")
 		// ? if we cant unmap -- are we screwed? should we unlock?
 		return err
 	}
@@ -744,6 +748,7 @@ func (d *cephRBDVolumeDriver) createRBDImage(pool string, name string, size int,
 	// unlock
 	err = d.unlockImage(pool, name, lockname)
 	if err != nil {
+		log.Printf("Creation: Failed to unlock")
 		return err
 	}
 
