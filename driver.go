@@ -763,7 +763,7 @@ func (d *cephRBDVolumeDriver) rbdImageIsLocked(pool, name string) (bool, error) 
 		return false, err
 	}
 	// otherwise - no error and output is not blank - assume a lock exists ...
-	return true, nil
+	return false, nil
 }
 
 // lockImage locks image and returns locker cookie name
