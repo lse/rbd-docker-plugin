@@ -81,6 +81,7 @@ func main() {
 		fmt.Printf("%s\n", VERSION)
 		return
 	}
+        fmt.Printf("Skylt version\n")
 
 	logFile, err := setupLogging()
 	if err != nil {
