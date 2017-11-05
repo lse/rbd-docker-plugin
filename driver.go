@@ -761,9 +761,8 @@ func (d *cephRBDVolumeDriver) rbdImageIsLocked(pool, name string) (bool, error) 
 	out, err := d.rbdsh(pool, "lock", "ls", name)
 	if err != nil || out != "" {
 		return false, err
-	}
-        else if err = nil && out = "" {
-            reutrn false, nil
+	} else if err == nil && out == "" {
+            return false, nil
         }
 	// otherwise - no error and output is not blank - assume a lock exists ...
 	return true, nil
